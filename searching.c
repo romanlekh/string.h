@@ -1,5 +1,8 @@
 #include "searching.h"
 #include "tools.h"
+#include "comparison.h"
+#include <stdio.h>
+#include <string.h>
 
 
 extern const char endSymb;
@@ -86,6 +89,64 @@ char* lstrrchr(const char *str, int character)
 
     return NULL;
 }
+
+size_t lstrspn(const char *str1, const char *str2)
+{
+    if( str1 == str2 )
+        return lstrlen(str1);
+
+    size_t counter = 0;
+    while( *str1 != endSymb )
+    {
+        if( lcstrchr(str2, *str1) )
+            ++counter;
+        ++str1;
+    }
+
+    return counter;
+}
+
+char* lstrstr(const char *str1, const char *str2)
+{
+    if( str1 == str2 )
+        return (char*)str1;
+
+    size_t len2 = lstrlen(str2);
+    while( *str1 != endSymb )
+    {
+        if( !lstrncmp(str1, str2, len2) )
+            return (char*)str1;
+        ++str1;
+    }
+
+    return NULL;
+}
+
+char* lstrtok(char *str, const char *delim)
+{
+    // First function call
+    static char *ptrDelim;
+    if( str )
+    {
+        ptrDelim = lstrpbrk(str, delim);
+        if( !ptrDelim )
+            return NULL;
+        *ptrDelim = endSymb;
+        return str;
+    }
+
+    // Next function call, expect NULL pointer
+    char* tempDelim = ptrDelim + 1;
+    ptrDelim = lstrpbrk(tempDelim, delim);
+    if( !ptrDelim )
+            return NULL;
+    *ptrDelim = endSymb;
+    return tempDelim;
+
+}
+
+
+
 
 
 

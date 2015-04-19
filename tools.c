@@ -4,35 +4,54 @@
 //end-string symbol (analog to standard '\0')
 const char endSymb = '~';
 
-//for my processor wordsize == int size, sizeof(void*) == sizeof(int)
+// for my processor wordsize == int size, sizeof(void*) == sizeof(int)
 const int sizeInt = sizeof(int);
-
-int lprint(char *data)
-{
-    char *temp = data;
-    int counter = 0;
-    while( *temp != endSymb )
-    {
-        putchar( *temp++ );
-        counter++;
-    }
-    return counter;
-}
 
 size_t lstrlen(const char *str)
 {
-    size_t sizeStr = 0;
-    while( *str++ != endSymb )
+    const char *sizeStr = str;
+    while( *sizeStr != endSymb )
         ++sizeStr;
+
+    return sizeStr - str;
+}
+
+char* tolstr(char *cstr)
+{
+    char* temp = cstr;
+    while( *cstr )
+        ++cstr;
+    *cstr = endSymb;
+    return temp;
+}
+
+char* tocstr(char *lstr)
+{
+    char* temp = lstr;
+    while( *lstr != endSymb )
+        ++lstr;
+    *lstr = '\0';
+    return temp;
+}
+
+int lprint(char *cstr)
+{
+    char *temp = cstr;
+    tocstr(cstr);
+    int sizeStr = printf("%s", temp);
+    tolstr(temp);
     return sizeStr;
 }
 
-void tolstr(char *str)
+void* lmemset(void *ptr, int value, size_t num)
 {
-    while( *str )
-        ++str;
-    *str = endSymb;
+    unsigned char *bytePtr = (unsigned char*)ptr;
+    unsigned char tempVal = value;
+    while ( num-- )
+        *bytePtr++ = tempVal;
+    return ptr;
 }
+
 
 
 

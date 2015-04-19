@@ -9,9 +9,8 @@ int lmemcmp(const void *ptr1,
     if(ptr1 == ptr2 || !num)
         return 0;
 
-    // look like this pointers can be from start "unsigned char*"
-    const char* ptrByte1 = (const char*)ptr1;
-    const char* ptrByte2 = (const char*)ptr2;
+    unsigned char* ptrByte1 = (unsigned char*)ptr1;
+    unsigned char* ptrByte2 = (unsigned char*)ptr2;
     while(num--)
         if(*ptrByte1++ != *ptrByte2++)
             return(*((unsigned char*)(ptrByte1-1)) -
@@ -21,6 +20,9 @@ int lmemcmp(const void *ptr1,
 
 int lstrcmp(const char *str1, const char *str2)
 {
+    if( str1 == str2 || *str2 == endSymb )
+        return 0;
+
     while(*str1 == *str2)
     {
         if(*str1 == endSymb)
@@ -33,9 +35,12 @@ int lstrcmp(const char *str1, const char *str2)
 
 int lstrncmp(const char *str1, const char *str2, size_t num)
 {
+    //if( str1 == str2 || *str2 == endSymb || num == 0)
+      //  return 0;
+
     while(*str1 == *str2 && num--)
     {
-        if(*str1 == endSymb)
+        if(*str1 == endSymb || num == 0)
             return 0;
         str1++;
         str2++;
